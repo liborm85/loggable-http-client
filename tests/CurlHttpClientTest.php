@@ -276,7 +276,7 @@ class CurlHttpClientTest extends TestCase
             [
                 'message' => 'Response content (canceled): "0 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
-                'response-content' => false,
+                'response-content' => null,
                 'info-canceled' => true,
             ],
         ];
@@ -309,7 +309,7 @@ class CurlHttpClientTest extends TestCase
             [
                 'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
-                'response-content' => false,
+                'response-content' => null,
                 'info-canceled' => true,
             ],
         ];
@@ -390,7 +390,7 @@ class CurlHttpClientTest extends TestCase
             [
                 'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
-                'response-content' => false,
+                'response-content' => null,
                 'info-canceled' => true,
             ],
         ];

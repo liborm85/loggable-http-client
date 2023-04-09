@@ -24,10 +24,17 @@ class TestLogger extends AbstractLogger
 
         if (isset($context['request']) && ($context['request'] instanceof RequestContext)) {
             $log['request-content'] = $context['request']->getContent();
+
             $requestContentJson = $this->fromJson($context['request']->getContent());
             if ($requestContentJson !== null) {
                 $log['request-content-json'] = $requestContentJson;
             }
+
+            $requestStreamContent = $this->getContentFromStream($context['request']->toStream());
+            if (is_string($requestStreamContent)) {
+                $log['request-content-from-stream'] = $requestStreamContent;
+            }
+
             $log['request-headers'] = $context['request']->getHeaders();
             $log['request-headers-string'] = $context['request']->getHeadersAsString();
             $log['request-time'] = $context['request']->getRequestTime() === null ? null : $context['request']->getRequestTime()->format(DATE_RFC3339_EXTENDED);
@@ -35,10 +42,18 @@ class TestLogger extends AbstractLogger
         }
 
         if (isset($context['response']) && ($context['response'] instanceof ResponseContext)) {
+            $log['response-content'] = $context['response']->getContent();
+
             $responseContentJson = $this->fromJson($context['response']->getContent());
             if ($responseContentJson !== null) {
                 $log['response-content-json'] = $responseContentJson;
             }
+
+            $responseStreamContent = $this->getContentFromStream($context['response']->toStream());
+            if (is_string($responseStreamContent)) {
+                $log['response-content-from-stream'] = $responseStreamContent;
+            }
+
             $log['response-headers'] = $context['response']->getHeaders();
             $log['response-headers-string'] = $context['response']->getHeadersAsString();
             $log['response-time'] = $context['response']->getResponseTime() === null ? null : $context['response']->getResponseTime()->format(DATE_RFC3339_EXTENDED);
@@ -61,14 +76,31 @@ class TestLogger extends AbstractLogger
         $this->logs[] = $log;
     }
 
-    private function fromJson(string $content): ?array
+    private function fromJson(?string $content): ?array
     {
+        if ($content === null) {
+            return null;
+        }
+
         $json = json_decode($content, true);
         if (json_last_error() === JSON_ERROR_NONE) {
             return $json;
         }
 
         return null;
+    }
+
+    /**
+     * @param resource|null$stream
+     * @return string|false
+     */
+    private function getContentFromStream($stream)
+    {
+        if ($stream === null) {
+            return false;
+        }
+
+        return stream_get_contents($stream);
     }
 
 }

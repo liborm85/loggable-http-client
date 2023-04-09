@@ -2,18 +2,18 @@
 
 namespace Liborm85\LoggableHttpClient\Context;
 
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 
 final class ResponseContext
 {
     use DateTimeTrait;
 
     /**
-     * @var ResponseInterface
+     * @var LoggableResponse
      */
     private $response;
 
-    public function __construct(ResponseInterface $response)
+    public function __construct(LoggableResponse $response)
     {
         $this->response = $response;
     }
@@ -55,12 +55,26 @@ final class ResponseContext
     }
 
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         try {
             return $this->response->getContent(false);
         } catch (\Throwable $ex) {
-            return '';
+            return null;
+        }
+    }
+
+    /**
+     * @return resource|null
+     */
+    public function toStream()
+    {
+        try {
+            $this->response->getContent(false); // load content
+
+            return $this->response->toStream(false);
+        } catch (\Throwable $ex) {
+            return null;
         }
     }
 

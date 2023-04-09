@@ -14,7 +14,7 @@ trait AssertTrait
             }
             $actual[$index] = [];
             foreach (array_keys($expectedItem) as $key) {
-                $actual[$index][$key] = $logs[$index][$key] ?? false;
+                $actual[$index][$key] = array_key_exists($key, $logs[$index]) ? $logs[$index][$key] : false;
             }
         }
 

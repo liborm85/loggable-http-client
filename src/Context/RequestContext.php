@@ -2,8 +2,8 @@
 
 namespace Liborm85\LoggableHttpClient\Context;
 
+use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 use Symfony\Component\HttpClient\Exception\TransportException;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class RequestContext
 {
@@ -16,7 +16,12 @@ final class RequestContext
     private static $CHUNK_SIZE = 16372;
 
     /**
-     * @var ResponseInterface
+     * @var int
+     */
+    private static $STREAM_MAX_MEMORY = 5 * 1024 * 1024;
+
+    /**
+     * @var LoggableResponse
      */
     private $response;
 
@@ -28,7 +33,7 @@ final class RequestContext
     /**
      * @param string|resource|\Closure $body
      */
-    public function __construct(ResponseInterface $response, $body)
+    public function __construct(LoggableResponse $response, $body)
     {
         $this->response = $response;
         $this->body = $body;
@@ -76,12 +81,24 @@ final class RequestContext
         return $this->response->getInfo('request_header') ?? '';
     }
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         try {
             return $this->getBodyAsString($this->body);
         } catch (\Throwable $ex) {
-            return '';
+            return null;
+        }
+    }
+
+    /**
+     * @return resource|null
+     */
+    public function toStream()
+    {
+        try {
+            return $this->getBodyAsResource($this->body);
+        } catch (\Throwable $ex) {
+            return null;
         }
     }
 
@@ -110,6 +127,40 @@ final class RequestContext
         }
 
         return $result;
+    }
+
+    /**
+     * @param \Closure|resource|string $body
+     * @return resource
+     */
+    public function getBodyAsResource($body)
+    {
+        if (\is_resource($body)) {
+            return $body;
+        }
+
+        $maxmemory = self::$STREAM_MAX_MEMORY;
+        $stream = fopen("php://temp/maxmemory:$maxmemory", 'r+');
+
+        if (!$body instanceof \Closure) {
+            fwrite($stream, $body);
+            rewind($stream);
+
+            return $stream;
+        }
+
+        while ('' !== $data = $body(self::$CHUNK_SIZE)) {
+            if (!\is_string($data)) {
+                throw new TransportException(sprintf('Return value of the "body" option callback must be string, "%s" returned.',
+                    get_debug_type($data)));
+            }
+
+            fwrite($stream, $data);
+        }
+
+        rewind($stream);
+
+        return $stream;
     }
 
 }
