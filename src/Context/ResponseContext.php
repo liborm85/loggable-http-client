@@ -28,20 +28,25 @@ final class ResponseContext
         return $this->unixTimeToDateTime($this->response->getInfo('response_time'));
     }
 
-    public function getHeaders(): array
+    public function getHeaders(): ?array
     {
         try {
             return $this->response->getHeaders(false);
         } catch (\Throwable $ex) {
-            return [];
+            return null;
         }
     }
 
-    public function getHeadersAsString(): string
+    public function getHeadersAsString(): ?string
     {
         $headers = $this->response->getInfo('response_headers');
         if ($headers !== null) {
             return implode("\n", $headers);
+        }
+
+        $headersAsArray = $this->getHeaders();
+        if ($headersAsArray === null) {
+            return null;
         }
 
         $headers = [];

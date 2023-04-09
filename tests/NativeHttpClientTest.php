@@ -278,6 +278,7 @@ class NativeHttpClientTest extends TestCase
                 'message' => 'Response content (canceled): "0 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content' => null,
+                'response-headers' => null,
                 'info-canceled' => true,
             ],
         ];
@@ -311,6 +312,7 @@ class NativeHttpClientTest extends TestCase
                 'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content' => null,
+                'response-headers-content-type' => ['application/json'],
                 'info-canceled' => true,
             ],
         ];
@@ -352,6 +354,7 @@ class NativeHttpClientTest extends TestCase
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
+                'response-headers-content-type' => ['application/json'],
                 'info-canceled' => false,
             ],
         ];
@@ -392,6 +395,7 @@ class NativeHttpClientTest extends TestCase
                 'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content' => null,
+                'response-headers-content-type' => null,
                 'info-canceled' => true,
             ],
         ];

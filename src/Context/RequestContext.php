@@ -44,10 +44,15 @@ final class RequestContext
         return $this->unixTimeToDateTime($this->response->getInfo('start_time'));
     }
 
-    public function getHeaders(): array
+    public function getHeaders(): ?array
     {
+        $headersAsString = $this->getHeadersAsString();
+        if ($headersAsString === null) {
+            return null;
+        }
+
         $headers = [];
-        foreach (explode("\n", $this->getHeadersAsString()) as $header) {
+        foreach (explode("\n", $headersAsString) as $header) {
             if ($header === '') {
                 continue;
             }
@@ -70,15 +75,15 @@ final class RequestContext
         return $headers;
     }
 
-    public function getHeadersAsString(): string
+    public function getHeadersAsString(): ?string
     {
         try {
             $this->response->getHeaders(false); // load headers
         } catch (\Throwable $ex) {
-
+            return null;
         }
 
-        return $this->response->getInfo('request_header') ?? '';
+        return $this->response->getInfo('request_header') ?? null;
     }
 
     public function getContent(): ?string

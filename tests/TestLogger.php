@@ -37,6 +37,7 @@ class TestLogger extends AbstractLogger
 
             $log['request-headers'] = $context['request']->getHeaders();
             $log['request-headers-string'] = $context['request']->getHeadersAsString();
+            $log['request-headers-content-type'] = $context['request']->getHeaders()['content-type'] ?? null;
             $log['request-time'] = $context['request']->getRequestTime() === null ? null : $context['request']->getRequestTime()->format(DATE_RFC3339_EXTENDED);
             $log['request-time-datetime'] = $context['request']->getRequestTime();
         }
@@ -56,6 +57,7 @@ class TestLogger extends AbstractLogger
 
             $log['response-headers'] = $context['response']->getHeaders();
             $log['response-headers-string'] = $context['response']->getHeadersAsString();
+            $log['response-headers-content-type'] = $context['response']->getHeaders()['content-type'] ?? null;
             $log['response-time'] = $context['response']->getResponseTime() === null ? null : $context['response']->getResponseTime()->format(DATE_RFC3339_EXTENDED);
             $log['response-time-datetime'] = $context['response']->getResponseTime();
         }
