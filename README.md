@@ -2,7 +2,17 @@
 
 Extended logging for the Symfony HTTP Client.
 
-TODO
+## Installation
+
+You can install it with:
+```
+composer require liborm85/loggable-http-client
+```
+
+## Requirements
+
+- PHP 7.2.5+
+- Symfony HTTP Client 5.4.0+
 
 ## Usage
 
