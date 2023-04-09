@@ -1,0 +1,40 @@
+{
+    "name": "liborm85/loggable-http-client",
+    "description": "",
+    "type": "library",
+    "keywords": [
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Libor M.",
+            "email": "liborm85@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/liborm85/loggable-http-client/issues",
+        "source": "https://github.com/liborm85/loggable-http-client"
+    },
+    "require": {
+        "php": ">=7.2.5",
+        "symfony/http-client": "^5.4",
+        "psr/log": "^1.0|^2.0|^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0|^9.0|^10.0",
+        "symfony/process": "^5.4|^6.2"
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "autoload": {
+        "psr-4": {
+            "Liborm85\\LoggableHttpClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Liborm85\\LoggableHttpClient\\Tests\\": "tests/"
+        }
+    }
+}
