@@ -136,7 +136,7 @@ class CurlHttpClientTest extends TestCase
         $logger = new TestLogger();
         $client = $this->getHttpClient($logger);
 
-        $requestTimeStart = new \DateTimeImmutable();;
+        $requestTimeStart = new \DateTimeImmutable();
         $response = $client->request('POST', 'http://127.0.0.1:8057/post', ['body' => 'abc=def']);
 
         $responseTimeStart = new \DateTimeImmutable();
@@ -274,7 +274,7 @@ class CurlHttpClientTest extends TestCase
                 'message' => 'Request: "POST http://127.0.0.1:8057/post"'
             ],
             [
-                'message' => 'Response content: "0 http://127.0.0.1:8057/post"',
+                'message' => 'Response content (canceled): "0 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content' => false,
                 'info-canceled' => true,
@@ -307,7 +307,7 @@ class CurlHttpClientTest extends TestCase
                 'message' => 'Response: "200 http://127.0.0.1:8057/post"'
             ],
             [
-                'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
+                'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content' => false,
                 'info-canceled' => true,
@@ -388,7 +388,7 @@ class CurlHttpClientTest extends TestCase
                 'message' => 'Response: "200 http://127.0.0.1:8057/post"'
             ],
             [
-                'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
+                'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content' => false,
                 'info-canceled' => true,

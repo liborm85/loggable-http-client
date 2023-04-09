@@ -125,6 +125,8 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
     public function cancel(): void
     {
         $this->response->cancel();
+
+        $this->logResponseContent();
     }
 
     /**
@@ -224,7 +226,11 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         ];
 
         $info = $this->getInfo();
-        $this->logger->info(sprintf('Response content: "%s %s"', $info['http_code'], $info['url']), $context);
+        if ($this->getInfo('canceled')) {
+            $this->logger->info(sprintf('Response content (canceled): "%s %s"', $info['http_code'], $info['url']), $context);
+        }  else {
+            $this->logger->info(sprintf('Response content: "%s %s"', $info['http_code'], $info['url']), $context);
+        }
     }
 
 }

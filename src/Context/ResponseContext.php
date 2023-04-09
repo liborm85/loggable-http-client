@@ -4,7 +4,7 @@ namespace Liborm85\LoggableHttpClient\Context;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class ResponseContext
+final class ResponseContext
 {
     use DateTimeTrait;
 

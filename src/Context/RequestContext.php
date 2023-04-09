@@ -5,7 +5,7 @@ namespace Liborm85\LoggableHttpClient\Context;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class RequestContext
+final class RequestContext
 {
 
     use DateTimeTrait;
