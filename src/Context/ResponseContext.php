@@ -52,7 +52,7 @@ final class ResponseContext implements BodyInterface
         }
 
         $headers = [];
-        foreach ($this->getHeaders() as $key => $header) {
+        foreach ($this->getHeaders() ?? [] as $key => $header) {
             foreach ($header as $item) {
                 $headers[] = "$key: $item";
             }
