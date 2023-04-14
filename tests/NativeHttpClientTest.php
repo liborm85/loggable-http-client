@@ -405,6 +405,55 @@ class NativeHttpClientTest extends TestCase
         $this->assertNull($logger->logs[2]['response-time-datetime']);
     }
 
+    public function testHttp404(): void
+    {
+        $logger = new TestLogger();
+        $client = $this->getHttpClient($logger);
+
+        $requestTimeStart = new \DateTimeImmutable();
+        $response = $client->request('POST', 'http://127.0.0.1:8057/404', ['body' => 'abc=def']);
+
+        $responseTimeStart = new \DateTimeImmutable();
+        $body = json_decode($response->getContent(false), true);
+        $requestTimeFinish = new \DateTimeImmutable();
+        $responseTimeFinish = new \DateTimeImmutable();
+
+        $this->assertSame(
+            ['REQUEST_URI' => '/404', 'REQUEST_METHOD' => 'POST'],
+            ['REQUEST_URI' => $body['REQUEST_URI'] ?? null, 'REQUEST_METHOD' => $body['REQUEST_METHOD'] ?? null]
+        );
+
+        $expected = [
+            [
+                'message' => 'Request: "POST http://127.0.0.1:8057/404"',
+            ],
+            [
+                'message' => 'Response: "404 http://127.0.0.1:8057/404"',
+            ],
+            [
+                'message' => 'Response content: "404 http://127.0.0.1:8057/404"',
+                'request-content' => 'abc=def',
+                'response-content-json' => [
+                    'SERVER_PROTOCOL' => 'HTTP/1.1',
+                    'SERVER_NAME' => '127.0.0.1',
+                    'REQUEST_URI' => '/404',
+                    'REQUEST_METHOD' => 'POST',
+                    'HTTP_CONNECTION' => 'close',
+                    'HTTP_ACCEPT' => '*/*',
+                    'HTTP_CONTENT_LENGTH' => '7',
+                    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
+                    'HTTP_ACCEPT_ENCODING' => 'gzip',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient/Native',
+                    'HTTP_HOST' => '127.0.0.1:8057',
+                ],
+            ],
+        ];
+        $this->assertSameResponseContentLog($expected, $logger->logs);
+
+        $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[2]['request-time-datetime']);
+        $this->assertDateTime($responseTimeStart, $responseTimeFinish, $logger->logs[2]['response-time-datetime']);
+    }
+
     private function getHttpClient(LoggerInterface $logger): HttpClientInterface
     {
         $client = new LoggableHttpClient(new NativeHttpClient());
