@@ -93,6 +93,8 @@ final class RequestBody implements BodyInterface
         }
 
         $maxmemory = self::$STREAM_MAX_MEMORY;
+
+        /** @var resource $stream */
         $stream = fopen("php://temp/maxmemory:$maxmemory", 'r+');
 
         if (!$body instanceof \Closure) {
