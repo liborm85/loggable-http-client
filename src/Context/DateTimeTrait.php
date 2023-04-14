@@ -1,10 +1,10 @@
 <?php
 
-
 namespace Liborm85\LoggableHttpClient\Context;
 
 trait DateTimeTrait
 {
+
     private function unixTimeToDateTime(?float $microtime): ?\DateTimeImmutable
     {
         if (is_null($microtime)) {
@@ -18,4 +18,5 @@ trait DateTimeTrait
 
         return $datetime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
     }
+
 }

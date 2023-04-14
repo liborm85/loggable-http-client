@@ -2,10 +2,12 @@
 
 namespace Liborm85\LoggableHttpClient\Context;
 
+use Liborm85\LoggableHttpClient\Body\BodyInterface;
 use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 
-final class ResponseContext
+final class ResponseContext implements BodyInterface
 {
+
     use DateTimeTrait;
 
     /**
@@ -58,7 +60,6 @@ final class ResponseContext
 
         return implode("\n", $headers);
     }
-
 
     public function getContent(): ?string
     {

@@ -2,6 +2,7 @@
 
 namespace Liborm85\LoggableHttpClient;
 
+use Liborm85\LoggableHttpClient\Body\RequestBody;
 use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -15,6 +16,7 @@ use Symfony\Contracts\Service\ResetInterface;
 
 final class LoggableHttpClient implements HttpClientInterface, ResetInterface, LoggerAwareInterface
 {
+
     use DecoratorTrait, HttpClientTrait {
         DecoratorTrait::withOptions insteadof HttpClientTrait;
     }
@@ -52,19 +54,31 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
             $options['extra']['curl'][CURLINFO_HEADER_OUT] = true;
         }
 
+        $thisInfo = &$this->info;
+
+        if (isset($options['json'])) {
+            $thisInfo['request_json'] = $options['json'];
+        }
+
         $options = $this->normalizeOptions($options);
 
-        $thisInfo = &$this->info;
+        if (isset($options['body'])) {
+            $thisInfo['request_body'] = new RequestBody($options['body']);
+        }
+
         $onProgress = $options['on_progress'] ?? null;
         if ($onProgress !== null) {
-            $options['on_progress'] = static function (int $dlNow, int $dlSize, array $info) use (&$thisInfo, $onProgress) {
+            $options['on_progress'] = static function (int $dlNow, int $dlSize, array $info) use (
+                &$thisInfo,
+                $onProgress
+            ) {
                 $onProgress($dlNow, $dlSize, $thisInfo + $info);
             };
         }
 
         $response = $this->client->request($method, $url, $options);
 
-        return new LoggableResponse($this, $response, $options, $thisInfo, $this->logger);
+        return new LoggableResponse($this, $response, $thisInfo, $this->logger);
     }
 
     /**
@@ -85,12 +99,14 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
             return $options;
         }
 
-        [, $normalizedOptions] = self::prepareRequest(null,
+        [, $normalizedOptions] = self::prepareRequest(
+            null,
             null,
             [
                 'body' => $options['body'] ?? null,
                 'json' => $options['json'] ?? null,
-            ]);
+            ]
+        );
 
         $options['body'] = $normalizedOptions['body'];
 

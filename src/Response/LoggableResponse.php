@@ -33,11 +33,6 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
     /**
      * @var array
      */
-    private $options;
-
-    /**
-     * @var array
-     */
     private $info = [];
 
     /**
@@ -50,11 +45,14 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
      */
     private $isResponseContentLogged = false;
 
-    public function __construct(HttpClientInterface $client, ResponseInterface $response, array $options, array &$info, ?LoggerInterface $logger)
-    {
+    public function __construct(
+        HttpClientInterface $client,
+        ResponseInterface $response,
+        array &$info,
+        ?LoggerInterface $logger
+    ) {
         $this->client = $client;
         $this->response = $response;
-        $this->options = $options;
         $this->info = &$info;
         $this->logger = $logger;
     }
@@ -171,7 +169,14 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
         foreach ($responses as $r) {
             if (!$r instanceof self) {
-                throw new \TypeError(sprintf('"%s::stream()" expects parameter 1 to be an iterable of %s objects, "%s" given.', LoggableHttpClient::class, self::class, get_debug_type($r)));
+                throw new \TypeError(
+                    sprintf(
+                        '"%s::stream()" expects parameter 1 to be an iterable of %s objects, "%s" given.',
+                        LoggableHttpClient::class,
+                        self::class,
+                        get_debug_type($r)
+                    )
+                );
             }
 
             $loggableResponseMap[$r->response] = $r;
@@ -190,12 +195,12 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
     public function __sleep(): array
     {
-        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
     }
 
     public function __wakeup()
     {
-        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }
 
     private function setResponseTime(): void
@@ -220,15 +225,18 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         }
 
         $context = [
-            'request' => new RequestContext($this, $this->options['body'] ?? ''),
+            'request' => new RequestContext($this),
             'response' => new ResponseContext($this),
             'info' => new InfoContext($this),
         ];
 
         $info = $this->getInfo();
         if ($this->getInfo('canceled')) {
-            $this->logger->info(sprintf('Response content (canceled): "%s %s"', $info['http_code'], $info['url']), $context);
-        }  else {
+            $this->logger->info(
+                sprintf('Response content (canceled): "%s %s"', $info['http_code'], $info['url']),
+                $context
+            );
+        } else {
             $this->logger->info(sprintf('Response content: "%s %s"', $info['http_code'], $info['url']), $context);
         }
     }
