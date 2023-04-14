@@ -98,6 +98,14 @@ final class RequestContext implements BodyInterface
         }
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getContent() ?? '';
+    }
+
     private function getRequestBody(): ?BodyInterface
     {
         $requestBody = $this->response->getInfo('request_body');

@@ -12,4 +12,9 @@ interface BodyInterface
      */
     public function toStream();
 
+    /**
+     * @return string
+     */
+    public function __toString();
+
 }

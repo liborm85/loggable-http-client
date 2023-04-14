@@ -71,6 +71,14 @@ final class ResponseContext implements BodyInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getContent() ?? '';
+    }
+
+    /**
      * @return resource|null
      */
     public function toStream()

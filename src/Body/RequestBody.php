@@ -44,6 +44,14 @@ final class RequestBody implements BodyInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getContent() ?? '';
+    }
+
+    /**
      * @param \Closure|resource|string $body
      */
     private function getBodyAsString($body): string
