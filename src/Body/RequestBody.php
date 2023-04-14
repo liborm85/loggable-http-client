@@ -57,7 +57,7 @@ final class RequestBody implements BodyInterface
     private function getBodyAsString($body): string
     {
         if (\is_resource($body)) {
-            return stream_get_contents($body);
+            return stream_get_contents($body) ?: '';
         }
 
         if (!$body instanceof \Closure) {

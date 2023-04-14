@@ -82,7 +82,7 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
     }
 
     /**
-     * @param ResponseInterface|iterable $responses
+     * @param LoggableResponse|iterable<LoggableResponse> $responses
      */
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {

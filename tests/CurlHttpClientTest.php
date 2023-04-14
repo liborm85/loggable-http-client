@@ -7,11 +7,13 @@ use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\CurlHttpClient;
+use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Test\TestHttpServer;
 
 class CurlHttpClientTest extends TestCase
 {
+
     use AssertTrait;
 
     public static function setUpBeforeClass(): void
@@ -36,10 +38,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -73,10 +75,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -85,7 +87,7 @@ class CurlHttpClientTest extends TestCase
                     '{"abc":"def"}' => '',
                     'REQUEST_METHOD' => 'POST',
                 ],
-            ]
+            ],
         ];
 
         $this->assertSameResponseContentLog($expected, $logger->logs);
@@ -111,10 +113,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -160,10 +162,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -194,16 +196,18 @@ class CurlHttpClientTest extends TestCase
         $requestTimeFinish = new \DateTimeImmutable();
         $responseTimeFinish = new \DateTimeImmutable();
 
+        $this->assertIsNotBool($content);
+
         $body = json_decode($content, true);
 
         $this->assertSame(['abc' => 'def', 'REQUEST_METHOD' => 'POST'], $body);
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -235,10 +239,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -255,7 +259,6 @@ class CurlHttpClientTest extends TestCase
         $this->assertDateTime($responseTimeStart, $responseTimeFinish, $logger->logs[2]['response-time-datetime']);
     }
 
-
     public function testCancelResponseAfterRequest(): void
     {
         $logger = new TestLogger();
@@ -271,7 +274,7 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content (canceled): "0 http://127.0.0.1:8057/post"',
@@ -302,10 +305,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
@@ -320,7 +323,6 @@ class CurlHttpClientTest extends TestCase
         $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[2]['request-time-datetime']);
         $this->assertNull($logger->logs[2]['response-time-datetime']);
     }
-
 
     public function testCancelResponseAfterGetContent(): void
     {
@@ -341,10 +343,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
@@ -385,10 +387,10 @@ class CurlHttpClientTest extends TestCase
 
         $expected = [
             [
-                'message' => 'Request: "POST http://127.0.0.1:8057/post"'
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
             ],
             [
-                'message' => 'Response: "200 http://127.0.0.1:8057/post"'
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
             ],
             [
                 'message' => 'Response content (canceled): "200 http://127.0.0.1:8057/post"',
