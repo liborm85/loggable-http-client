@@ -41,25 +41,26 @@ class MyLogger extends \Psr\Log\AbstractLogger
     public function log($level, $message, array $context = []): void
     {
         if (isset($context['request']) && ($context['request'] instanceof \Liborm85\LoggableHttpClient\Context\RequestContext)) {
-            // $context['request']->getContent();
-            // $context['request']->toStream();
-            // $context['request']->getHeadersAsString();
-            // $context['request']->getRequestTime();
-            // etc.
+            $context['request']->getContent(); // request content body as string
+            (string)$context['request']; // is Stringable, request content body as string
+            $context['request']->toStream(); // request content body as PHP stream
+            $context['request']->getHeadersAsString(); // request headers as string
+            $context['request']->getHeaders(); // request headers as array (string[][])
+            $context['request']->getRequestTime(); // request time as DateTimeInterface
         }
 
         if (isset($context['response']) && ($context['response'] instanceof \Liborm85\LoggableHttpClient\Context\ResponseContext)) {
-            // $context['response']->getContent()
-            // $context['response']->toStream();
-            // $context['response']->getHeadersAsString()
-            // $context['response']->getResponseTime()
-            // etc.
+            $context['response']->getContent(); // response content body as string
+            (string)$context['response']; // is Stringable, response content body as string
+            $context['response']->toStream(); // response content body as PHP stream
+            $context['response']->getHeadersAsString(); // response headers as string
+            $context['response']->getHeaders(); // response headers as array (string[][])
+            $context['response']->getResponseTime(); // response time as DateTimeInterface
         }
 
         if (isset($context['info']) && ($context['info'] instanceof \Liborm85\LoggableHttpClient\Context\InfoContext)) {
-            // $context['info']->getInfo();
-            // $context['info']->getInfo('url');
-            // etc.
+            $context['info']->getInfo(); // return all available information
+            $context['info']->getInfo('url'); // return one information for provided type
         }
     }
 
