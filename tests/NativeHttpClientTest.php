@@ -490,6 +490,11 @@ class NativeHttpClientTest extends TestCase
                 'info-error' => 'fopen(http://127.0.0.1:8057/timeout-long): failed to open stream: HTTP request failed!',
             ],
         ];
+
+        if (PHP_VERSION_ID >= 80000) {
+            $expected[1]['info-error'] = 'fopen(http://127.0.0.1:8057/timeout-long): Failed to open stream: HTTP request failed!';
+        }
+
         $this->assertSameResponseContentLog($expected, $logger->logs);
 
         $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[1]['request-time-datetime']);
