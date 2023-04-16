@@ -454,6 +454,46 @@ class CurlHttpClientTest extends TestCase
         $this->assertDateTime($responseTimeStart, $responseTimeFinish, $logger->logs[2]['response-time-datetime']);
     }
 
+    public function testTimeout(): void
+    {
+        $logger = new TestLogger();
+        $client = $this->getHttpClient($logger);
+
+        $requestTimeStart = new \DateTimeImmutable();
+        $response = $client->request(
+            'POST',
+            'http://127.0.0.1:8057/timeout-long',
+            ['body' => 'abc=def', 'timeout' => 0.1]
+        );
+
+        try {
+            $response->getContent(false);
+        } catch (TimeoutException $ex) {
+            $this->assertInstanceOf(TimeoutException::class, $ex);
+            // ignore timeout exception
+        }
+
+        unset($response);
+
+        $requestTimeFinish = new \DateTimeImmutable();
+
+        $expected = [
+            [
+                'message' => 'Request: "POST http://127.0.0.1:8057/timeout-long"',
+            ],
+            [
+                'message' => 'Response content: "0 http://127.0.0.1:8057/timeout-long"',
+                'request-content' => 'abc=def',
+                'response-content' => null,
+                'info-error' => 'Idle timeout reached for "http://127.0.0.1:8057/timeout-long".',
+            ],
+        ];
+        $this->assertSameResponseContentLog($expected, $logger->logs);
+
+        $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[1]['request-time-datetime']);
+        $this->assertNull($logger->logs[1]['response-time-datetime']);
+    }
+
     private function getHttpClient(LoggerInterface $logger): HttpClientInterface
     {
         $client = new LoggableHttpClient(new CurlHttpClient());

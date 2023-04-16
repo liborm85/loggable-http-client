@@ -6,6 +6,7 @@ use Liborm85\LoggableHttpClient\LoggableHttpClient;
 use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\NativeHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Test\TestHttpServer;
@@ -452,6 +453,47 @@ class NativeHttpClientTest extends TestCase
 
         $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[2]['request-time-datetime']);
         $this->assertDateTime($responseTimeStart, $responseTimeFinish, $logger->logs[2]['response-time-datetime']);
+    }
+
+    public function testTimeout(): void
+    {
+        $logger = new TestLogger();
+        $client = $this->getHttpClient($logger);
+
+        $requestTimeStart = new \DateTimeImmutable();
+        $response = $client->request(
+            'POST',
+            'http://127.0.0.1:8057/timeout-long',
+            ['body' => 'abc=def', 'timeout' => 0.1]
+        );
+
+        try {
+            $response->getContent(false);
+        } catch (TransportException $ex) {
+            // native client not thrown specifically TimeoutException
+            $this->assertInstanceOf(TransportException::class, $ex);
+            // ignore timeout exception
+        }
+
+        unset($response);
+
+        $requestTimeFinish = new \DateTimeImmutable();
+
+        $expected = [
+            [
+                'message' => 'Request: "POST http://127.0.0.1:8057/timeout-long"',
+            ],
+            [
+                'message' => 'Response content: "0 http://127.0.0.1:8057/timeout-long"',
+                'request-content' => 'abc=def',
+                'response-content' => null,
+                'info-error' => 'fopen(http://127.0.0.1:8057/timeout-long): failed to open stream: HTTP request failed!',
+            ],
+        ];
+        $this->assertSameResponseContentLog($expected, $logger->logs);
+
+        $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[1]['request-time-datetime']);
+        $this->assertNull($logger->logs[1]['response-time-datetime']);
     }
 
     private function getHttpClient(LoggerInterface $logger): HttpClientInterface
