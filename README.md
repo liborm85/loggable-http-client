@@ -9,18 +9,13 @@ You can install it with:
 composer require liborm85/loggable-http-client
 ```
 
-## Requirements
-
-- PHP 7.2.5+
-- Symfony HTTP Client 5.4.0+
-
 ## Usage
 
 ```php
 <?php
 
 $httpClient = \Symfony\Component\HttpClient\HttpClient::create(); // optional
-$loggableHttpClient = new \Liborm85\LoggableHttpClient\LoggableHttpClient();
+$loggableHttpClient = new \Liborm85\LoggableHttpClient\LoggableHttpClient($httpClient);
 $loggableHttpClient->setLogger(new \MyLogger());
 
 $response = $loggableHttpClient->request('GET', 'https://example.com');

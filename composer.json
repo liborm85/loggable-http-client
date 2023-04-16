@@ -1,8 +1,16 @@
 {
     "name": "liborm85/loggable-http-client",
-    "description": "",
+    "description": "Extended logging for the Symfony HTTP Client.",
     "type": "library",
     "keywords": [
+        "php",
+        "symfony",
+        "http-client",
+        "http",
+        "log",
+        "logger",
+        "logging",
+        "psr-3"
     ],
     "license": "MIT",
     "authors": [
@@ -15,17 +23,25 @@
         "issues": "https://github.com/liborm85/loggable-http-client/issues",
         "source": "https://github.com/liborm85/loggable-http-client"
     },
+    "provide": {
+        "symfony/http-client-implementation": "2.4",
+        "psr/log-implementation": "^1.0|^2.0|^3.0"
+    },
     "require": {
         "php": ">=7.2.5",
-        "symfony/http-client": "^5.4",
+        "symfony/http-client-contracts": "^2.4",
         "psr/log": "^1.0|^2.0|^3.0"
     },
     "require-dev": {
         "ext-curl": "*",
         "ext-json": "*",
         "phpunit/phpunit": "^8.0|^9.0",
+        "symfony/http-client": "^5.4",
         "symfony/process": "^5.4|^6.2",
         "amphp/http-client": "^4.2.1"
+    },
+    "suggest": {
+        "symfony/http-client": "This package requires an actual Symfony HTTP client implementation to decorate."
     },
     "scripts": {
         "test": "phpunit"
