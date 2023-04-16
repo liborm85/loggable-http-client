@@ -25,7 +25,7 @@
     },
     "provide": {
         "symfony/http-client-implementation": "2.4",
-        "psr/log-implementation": "^1.0|^2.0|^3.0"
+        "psr/log-implementation": "1.0|2.0|3.0"
     },
     "require": {
         "php": ">=7.2.5",
