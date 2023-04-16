@@ -1,13 +1,27 @@
 # [WIP] Loggable HTTP Client
 
-Extended logging for the Symfony HTTP Client.
+Extended logging for the Symfony HTTP Client allowing especially to log the content of the request and response.
 
+Adds events to [PSR-3](https://www.php-fig.org/psr/psr-3/) logger interface:
+- `'Response content:'` (level: `info`) - response body content received; in context is available:
+  - `request` (`\Liborm85\LoggableHttpClient\Context\RequestContext`) - details in Usage
+  - `response` (`\Liborm85\LoggableHttpClient\Context\ResponseContext`) - details in Usage
+  - `info` (`\Liborm85\LoggableHttpClient\Context\InfoContext`) - details in Usage
+- `'Response content (canceled):'` (level: `info`) - same as above, only for canceled request (not all data may be available)
+
+Adds additional information to `getInfo()` method:
+- `request_json` (`mixed`) - `json` option from request `$options` (if is provided)
+- `request_body` (`\Liborm85\LoggableHttpClient\Body\RequestBody`) - `body` option from request `$options` transformed to object (if is provided)
+- `response_time` (`float`) - the time when the response was received
+
+<!-- TBD
 ## Installation
 
 You can install it with:
 ```
 composer require liborm85/loggable-http-client
 ```
+-->
 
 ## Usage
 
