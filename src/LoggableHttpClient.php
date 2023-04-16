@@ -42,13 +42,7 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
 
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
-        if (!isset($options['extra'])) {
-            $options['extra'] = [];
-        }
-
-        if (!isset($options['extra']['curl'])) {
-            $options['extra']['curl'] = [];
-        }
+        $options['buffer'] = true;
 
         if (defined('CURLINFO_HEADER_OUT')) {
             $options['extra']['curl'][CURLINFO_HEADER_OUT] = true;
