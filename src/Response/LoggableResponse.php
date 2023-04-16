@@ -60,8 +60,6 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
     public function __destruct()
     {
         $this->logResponseContent();
-
-        unset($this->response);
     }
 
     /**
