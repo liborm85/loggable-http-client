@@ -4,9 +4,9 @@ Extended logging for the Symfony HTTP Client allowing especially to log the cont
 
 Adds events to [PSR-3](https://www.php-fig.org/psr/psr-3/) logger interface:
 - `'Response content:'` (level: `info`) - response body content received; in context is available:
-  - `request` (`\Liborm85\LoggableHttpClient\Context\RequestContext`) - details in Usage
-  - `response` (`\Liborm85\LoggableHttpClient\Context\ResponseContext`) - details in Usage
-  - `info` (`\Liborm85\LoggableHttpClient\Context\InfoContext`) - details in Usage
+  - `request` (`\Liborm85\LoggableHttpClient\Context\RequestContext`) - details in [Usage](#usage)
+  - `response` (`\Liborm85\LoggableHttpClient\Context\ResponseContext`) - details in [Usage](#usage)
+  - `info` (`\Liborm85\LoggableHttpClient\Context\InfoContext`) - details in [Usage](#usage)
 - `'Response content (canceled):'` (level: `info`) - same as above, only for canceled request (not all data may be available)
 
 Adds additional information to `getInfo()` method:
