@@ -5,8 +5,10 @@ namespace Liborm85\LoggableHttpClient\Response;
 use Liborm85\LoggableHttpClient\Context\InfoContext;
 use Liborm85\LoggableHttpClient\Context\RequestContext;
 use Liborm85\LoggableHttpClient\Context\ResponseContext;
+use Liborm85\LoggableHttpClient\Internal\DecoratorTrace;
 use Liborm85\LoggableHttpClient\LoggableHttpClient;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\EventSourceHttpClient;
 use Symfony\Component\HttpClient\Response\StreamableInterface;
 use Symfony\Component\HttpClient\Response\StreamWrapper;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -45,6 +47,11 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
      */
     private $isResponseContentLogged = false;
 
+    /**
+     * @var bool
+     */
+    private $isAllowedLogResponseContent;
+
     public function __construct(
         HttpClientInterface $client,
         ResponseInterface $response,
@@ -55,6 +62,10 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         $this->response = $response;
         $this->info = &$info;
         $this->logger = $logger;
+        $this->isAllowedLogResponseContent = !in_array(
+            EventSourceHttpClient::class,
+            DecoratorTrace::getOuterDecorators()
+        );
     }
 
     public function __destruct()
@@ -210,7 +221,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
     private function logResponseContent(): void
     {
-        if (!$this->logger || $this->isResponseContentLogged) {
+        if (!$this->logger || !$this->isAllowedLogResponseContent || $this->isResponseContentLogged) {
             return;
         }
 
