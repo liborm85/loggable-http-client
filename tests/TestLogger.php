@@ -2,9 +2,9 @@
 
 namespace Liborm85\LoggableHttpClient\Tests;
 
-use Liborm85\LoggableHttpClient\Context\InfoContext;
-use Liborm85\LoggableHttpClient\Context\RequestContext;
-use Liborm85\LoggableHttpClient\Context\ResponseContext;
+use Liborm85\LoggableHttpClient\Context\InfoContextInterface;
+use Liborm85\LoggableHttpClient\Context\RequestContextInterface;
+use Liborm85\LoggableHttpClient\Context\ResponseContextInterface;
 use Psr\Log\AbstractLogger;
 
 class TestLogger extends AbstractLogger
@@ -22,7 +22,7 @@ class TestLogger extends AbstractLogger
             'message' => $message,
         ];
 
-        if (isset($context['request']) && ($context['request'] instanceof RequestContext)) {
+        if (isset($context['request']) && ($context['request'] instanceof RequestContextInterface)) {
             $log['request-content'] = $context['request']->getContent();
 
             $requestContentJson = $this->fromJson($context['request']->getContent());
@@ -43,7 +43,7 @@ class TestLogger extends AbstractLogger
             $log['request-time-datetime'] = $context['request']->getRequestTime();
         }
 
-        if (isset($context['response']) && ($context['response'] instanceof ResponseContext)) {
+        if (isset($context['response']) && ($context['response'] instanceof ResponseContextInterface)) {
             $log['response-content'] = $context['response']->getContent();
 
             $responseContentJson = $this->fromJson($context['response']->getContent());
@@ -64,7 +64,7 @@ class TestLogger extends AbstractLogger
             $log['response-time-datetime'] = $context['response']->getResponseTime();
         }
 
-        if (isset($context['info']) && ($context['info'] instanceof InfoContext)) {
+        if (isset($context['info']) && ($context['info'] instanceof InfoContextInterface)) {
             $log['info-canceled'] = $context['info']->getInfo('canceled');
 
             $error = $context['info']->getInfo('error');

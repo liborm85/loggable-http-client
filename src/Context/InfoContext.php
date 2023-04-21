@@ -4,7 +4,7 @@ namespace Liborm85\LoggableHttpClient\Context;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class InfoContext
+final class InfoContext implements InfoContextInterface
 {
 
     /**

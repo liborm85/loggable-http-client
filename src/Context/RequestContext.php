@@ -5,7 +5,7 @@ namespace Liborm85\LoggableHttpClient\Context;
 use Liborm85\LoggableHttpClient\Body\BodyInterface;
 use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 
-final class RequestContext implements BodyInterface
+final class RequestContext implements RequestContextInterface, BodyInterface
 {
 
     use DateTimeTrait;
