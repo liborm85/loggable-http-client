@@ -70,7 +70,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
     public function __destruct()
     {
-        $this->logResponseContent();
+        $this->logResponseContent(true);
     }
 
     /**
@@ -219,7 +219,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         }
     }
 
-    private function logResponseContent(): void
+    private function logResponseContent(bool $isDestruct = false): void
     {
         if (!$this->logger || !$this->isAllowedLogResponseContent || $this->isResponseContentLogged) {
             return;
@@ -231,6 +231,14 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
             $this->response->getHeaders(false); // load headers
         } catch (\Throwable $ex) {
 
+        }
+
+        if ($isDestruct) {
+            try {
+                $this->response->getContent(false); // load content
+            } catch (\Throwable $ex) {
+
+            }
         }
 
         $context = [
