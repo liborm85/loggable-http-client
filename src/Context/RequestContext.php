@@ -25,6 +25,11 @@ final class RequestContext implements RequestContextInterface, BodyInterface
         return $this->unixTimeToDateTime($this->response->getInfo('start_time'));
     }
 
+    public function getRequestMethod(): string
+    {
+        return $this->response->getInfo('http_method');
+    }
+
     public function getHeaders(): ?array
     {
         $headersAsString = $this->getHeadersAsString();

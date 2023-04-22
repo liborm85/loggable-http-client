@@ -7,6 +7,8 @@ interface RequestContextInterface
 
     public function getRequestTime(): ?\DateTimeInterface;
 
+    public function getRequestMethod(): string;
+
     public function getHeaders(): ?array;
 
     public function getHeadersAsString(): ?string;
