@@ -9,6 +9,8 @@ interface RequestContextInterface
 
     public function getRequestMethod(): string;
 
+    public function getUrl(): string;
+
     public function getHeaders(): ?array;
 
     public function getHeadersAsString(): ?string;

@@ -30,6 +30,11 @@ final class RequestContext implements RequestContextInterface, BodyInterface
         return $this->response->getInfo('http_method');
     }
 
+    public function getUrl(): string
+    {
+        return $this->response->getInfo('url');
+    }
+
     public function getHeaders(): ?array
     {
         $headersAsString = $this->getHeadersAsString();

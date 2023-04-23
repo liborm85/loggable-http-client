@@ -36,6 +36,7 @@ class TestLogger extends AbstractLogger
             }
 
             $log['request-method']  = $context['request']->getRequestMethod();
+            $log['request-url']  = $context['request']->getUrl();
             $log['request-headers'] = $context['request']->getHeaders();
             $log['request-headers-string'] = $context['request']->getHeadersAsString();
             $log['request-headers-content-type'] = $context['request']->getHeaders()['content-type'] ?? null;

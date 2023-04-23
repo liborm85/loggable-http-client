@@ -47,6 +47,8 @@ class MyLogger extends \Psr\Log\AbstractLogger
             $context['request']->getHeadersAsString(); // request headers as string
             $context['request']->getHeaders(); // request headers as array (string[][])
             $context['request']->getRequestTime(); // request time as DateTimeInterface
+            $context['request']->getRequestMethod(); // request HTTP method
+            $context['request']->getUrl(); // full request URL
         }
 
         if (isset($context['response']) && ($context['response'] instanceof \Liborm85\LoggableHttpClient\Context\ResponseContextInterface)) {
