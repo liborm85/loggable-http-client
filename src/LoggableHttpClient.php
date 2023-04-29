@@ -7,6 +7,7 @@ use Liborm85\LoggableHttpClient\Response\LoggableResponse;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\DecoratorTrait;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\HttpClientTrait;
 use Symfony\Component\HttpClient\Response\ResponseStream;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -102,13 +103,48 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
             ]
         );
 
-        $options['body'] = $normalizedOptions['body'];
+        $options['body'] = $this->fixBody($normalizedOptions['body']);
 
         if (isset($options['json'])) {
             unset($options['json']);
         }
 
         return $options;
+    }
+
+    /**
+     * Symfony HTTP client contains bug for body if is is yield function (body can be returned only once).
+     * Symfony doesn't solve this in any way and if you use RetryableHttpClient for first request is body available
+     * but for second and every other send empty string.
+     *
+     * @param \Closure|resource|string $body
+     * @return resource|string
+     */
+    private function fixBody($body)
+    {
+        if (!$body instanceof \Closure) {
+            return $body;
+        }
+
+        /** @var resource $stream */
+        $stream = fopen("php://temp", 'r+');
+
+        while ('' !== $data = $body(self::$CHUNK_SIZE)) {
+            if (!\is_string($data)) {
+                throw new TransportException(
+                    sprintf(
+                        'Return value of the "body" option callback must be string, "%s" returned.',
+                        get_debug_type($data)
+                    )
+                );
+            }
+
+            fwrite($stream, $data);
+        }
+
+        rewind($stream);
+
+        return $stream;
     }
 
 }

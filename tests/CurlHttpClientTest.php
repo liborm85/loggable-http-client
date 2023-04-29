@@ -16,6 +16,15 @@ class CurlHttpClientTest extends TestCase
 
     use AssertTrait;
 
+    private function getIterableYieldContent(): iterable
+    {
+        yield 'abc';
+        yield '=';
+        yield 'd';
+        yield 'e';
+        yield 'f';
+    }
+
     public static function setUpBeforeClass(): void
     {
         TestHttpServer::start();
@@ -28,6 +37,47 @@ class CurlHttpClientTest extends TestCase
 
         $requestTimeStart = new \DateTimeImmutable();
         $response = $client->request('POST', 'http://127.0.0.1:8057/post', ['body' => 'abc=def']);
+
+        $responseTimeStart = new \DateTimeImmutable();
+        $body = json_decode($response->getContent(), true);
+        $requestTimeFinish = new \DateTimeImmutable();
+        $responseTimeFinish = new \DateTimeImmutable();
+
+        $this->assertSame(['abc' => 'def', 'REQUEST_METHOD' => 'POST'], $body);
+
+        $expected = [
+            [
+                'message' => 'Request: "POST http://127.0.0.1:8057/post"',
+            ],
+            [
+                'message' => 'Response: "200 http://127.0.0.1:8057/post"',
+            ],
+            [
+                'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
+                'request-content' => 'abc=def',
+                'response-content-json' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
+            ],
+        ];
+        $this->assertSameResponseContentLog($expected, $logger->logs);
+
+        $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[2]['request-time-datetime']);
+        $this->assertDateTime($responseTimeStart, $responseTimeFinish, $logger->logs[2]['response-time-datetime']);
+    }
+
+    public function testGetContentIterableYieldBody(): void
+    {
+        $logger = new TestLogger();
+        $client = $this->getHttpClient($logger);
+
+        $requestTimeStart = new \DateTimeImmutable();
+        $response = $client->request(
+            'POST',
+            'http://127.0.0.1:8057/post',
+            ['body' => $this->getIterableYieldContent()]
+        );
 
         $responseTimeStart = new \DateTimeImmutable();
         $body = json_decode($response->getContent(), true);

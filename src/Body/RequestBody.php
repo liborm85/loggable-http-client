@@ -8,22 +8,12 @@ final class RequestBody implements BodyInterface
 {
 
     /**
-     * @var int
-     */
-    private static $CHUNK_SIZE = 16372;
-
-    /**
-     * @var int
-     */
-    private static $STREAM_MAX_MEMORY = 5 * 1024 * 1024;
-
-    /**
-     * @var \Closure|resource|string
+     * @var resource|string
      */
     private $body;
 
     /**
-     * @param \Closure|resource|string $body
+     * @param resource|string $body
      */
     public function __construct($body)
     {
@@ -52,71 +42,35 @@ final class RequestBody implements BodyInterface
     }
 
     /**
-     * @param \Closure|resource|string $body
+     * @param resource|string $body
      */
     private function getBodyAsString($body): string
     {
         if (\is_resource($body)) {
+            rewind($body);
+
             return stream_get_contents($body) ?: '';
         }
 
-        if (!$body instanceof \Closure) {
-            return $body;
-        }
-
-        $result = '';
-
-        while ('' !== $data = $body(self::$CHUNK_SIZE)) {
-            if (!\is_string($data)) {
-                throw new TransportException(
-                    sprintf(
-                        'Return value of the "body" option callback must be string, "%s" returned.',
-                        get_debug_type($data)
-                    )
-                );
-            }
-
-            $result .= $data;
-        }
-
-        return $result;
+        return $body;
     }
 
     /**
-     * @param \Closure|resource|string $body
+     * @param resource|string $body
      * @return resource
      */
     private function getBodyAsResource($body)
     {
         if (\is_resource($body)) {
+            rewind($body);
+
             return $body;
         }
 
-        $maxmemory = self::$STREAM_MAX_MEMORY;
-
         /** @var resource $stream */
-        $stream = fopen("php://temp/maxmemory:$maxmemory", 'r+');
+        $stream = fopen("php://temp", 'r+');
 
-        if (!$body instanceof \Closure) {
-            fwrite($stream, $body);
-            rewind($stream);
-
-            return $stream;
-        }
-
-        while ('' !== $data = $body(self::$CHUNK_SIZE)) {
-            if (!\is_string($data)) {
-                throw new TransportException(
-                    sprintf(
-                        'Return value of the "body" option callback must be string, "%s" returned.',
-                        get_debug_type($data)
-                    )
-                );
-            }
-
-            fwrite($stream, $data);
-        }
-
+        fwrite($stream, $body);
         rewind($stream);
 
         return $stream;
