@@ -7,7 +7,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * @internal
  */
-class DecoratorTrace
+final class DecoratorTrace
 {
 
     private function __construct()
@@ -29,6 +29,14 @@ class DecoratorTrace
                 return is_a($value, HttpClientInterface::class, true);
             }
         );
+    }
+
+    /**
+     * @param class-string $className
+     */
+    public static function isOuterDecorator(string $className): bool
+    {
+        return in_array($className, self::getOuterDecorators());
     }
 
 }

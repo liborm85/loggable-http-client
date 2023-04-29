@@ -62,10 +62,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         $this->response = $response;
         $this->info = &$info;
         $this->logger = $logger;
-        $this->isAllowedLogResponseContent = !in_array(
-            EventSourceHttpClient::class,
-            DecoratorTrace::getOuterDecorators()
-        );
+        $this->isAllowedLogResponseContent = !DecoratorTrace::isOuterDecorator(EventSourceHttpClient::class);
     }
 
     public function __destruct()

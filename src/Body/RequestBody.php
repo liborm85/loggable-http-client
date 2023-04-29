@@ -2,8 +2,6 @@
 
 namespace Liborm85\LoggableHttpClient\Body;
 
-use Symfony\Component\HttpClient\Exception\TransportException;
-
 final class RequestBody implements BodyInterface
 {
 
