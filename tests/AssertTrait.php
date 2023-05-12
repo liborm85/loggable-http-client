@@ -21,13 +21,10 @@ trait AssertTrait
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @param mixed $actual
-     */
     final public function assertDateTime(
         ?\DateTimeInterface $expectedMin,
         ?\DateTimeInterface $expectedMax,
-        $actual
+        mixed $actual
     ): void {
         $dateTimeFormat = 'Y-m-d\TH:i:s.uP';
         $this->assertInstanceOf(\DateTimeInterface::class, $expectedMin);

@@ -7,20 +7,14 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class InfoContext implements InfoContextInterface
 {
 
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
+    private ResponseInterface $response;
 
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInfo(string $type = null)
+    public function getInfo(string $type = null): mixed
     {
         return $this->response->getInfo($type);
     }

@@ -22,35 +22,17 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class LoggableResponse implements ResponseInterface, StreamableInterface
 {
 
-    /**
-     * @var HttpClientInterface
-     */
-    private $client;
+    private HttpClientInterface $client;
 
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
+    private ResponseInterface $response;
 
-    /**
-     * @var array
-     */
-    private $info = [];
+    private array $info = [];
 
-    /**
-     * @var ?LoggerInterface
-     */
-    private $logger;
+    private ?LoggerInterface $logger;
 
-    /**
-     * @var bool
-     */
-    private $isResponseContentLogged = false;
+    private bool $isResponseContentLogged = false;
 
-    /**
-     * @var bool
-     */
-    private $isAllowedLogResponseContent;
+    private bool $isAllowedLogResponseContent;
 
     public function __construct(
         HttpClientInterface $client,
@@ -133,10 +115,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         $this->logResponseContent();
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInfo(string $type = null)
+    public function getInfo(string $type = null): mixed
     {
         if (null !== $type) {
             return $this->info[$type] ?? $this->response->getInfo($type);
@@ -226,7 +205,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
         try {
             $this->response->getHeaders(false); // load headers
-        } catch (\Throwable $ex) {
+        } catch (\Throwable) {
 
         }
 

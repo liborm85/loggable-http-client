@@ -2,7 +2,7 @@
 
 namespace Liborm85\LoggableHttpClient\Context;
 
-interface RequestContextInterface
+interface RequestContextInterface extends \Stringable
 {
 
     public function getRequestTime(): ?\DateTimeInterface;
@@ -22,9 +22,6 @@ interface RequestContextInterface
      */
     public function toStream();
 
-    /**
-     * @return string
-     */
-    public function __toString();
+    public function __toString(): string;
 
 }

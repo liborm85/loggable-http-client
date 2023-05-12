@@ -2,7 +2,7 @@
 
 namespace Liborm85\LoggableHttpClient\Context;
 
-interface ResponseContextInterface
+interface ResponseContextInterface extends \Stringable
 {
 
     public function getStatusCode(): int;
@@ -20,9 +20,6 @@ interface ResponseContextInterface
      */
     public function toStream();
 
-    /**
-     * @return string
-     */
-    public function __toString();
+    public function __toString(): string;
 
 }

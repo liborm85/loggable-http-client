@@ -10,10 +10,7 @@ final class RequestContext implements RequestContextInterface, BodyInterface
 
     use DateTimeTrait;
 
-    /**
-     * @var LoggableResponse
-     */
-    private $response;
+    private LoggableResponse $response;
 
     public function __construct(LoggableResponse $response)
     {
@@ -70,7 +67,7 @@ final class RequestContext implements RequestContextInterface, BodyInterface
     {
         try {
             $this->response->getHeaders(false); // load headers
-        } catch (\Throwable $ex) {
+        } catch (\Throwable) {
             return null;
         }
 
@@ -86,7 +83,7 @@ final class RequestContext implements RequestContextInterface, BodyInterface
 
         try {
             return $requestBody->getContent();
-        } catch (\Throwable $ex) {
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -103,15 +100,12 @@ final class RequestContext implements RequestContextInterface, BodyInterface
 
         try {
             return $requestBody->toStream();
-        } catch (\Throwable $ex) {
+        } catch (\Throwable) {
             return null;
         }
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getContent() ?? '';
     }

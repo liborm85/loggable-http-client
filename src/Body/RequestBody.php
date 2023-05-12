@@ -31,10 +31,7 @@ final class RequestBody implements BodyInterface
         return $this->getBodyAsResource($this->body);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getContent() ?? '';
     }

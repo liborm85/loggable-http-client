@@ -2,7 +2,7 @@
 
 namespace Liborm85\LoggableHttpClient\Body;
 
-interface BodyInterface
+interface BodyInterface extends \Stringable
 {
 
     public function getContent(): ?string;
@@ -12,9 +12,6 @@ interface BodyInterface
      */
     public function toStream();
 
-    /**
-     * @return string
-     */
-    public function __toString();
+    public function __toString(): string;
 
 }
