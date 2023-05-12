@@ -1,4 +1,4 @@
-# [WIP] Loggable HTTP Client
+# Loggable HTTP Client
 
 Extended logging for the Symfony HTTP Client allowing especially to log the content of the request and response.
 
