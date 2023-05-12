@@ -1,4 +1,4 @@
-# Loggable HTTP Client
+# Loggable HTTP Client [![Packagist](https://img.shields.io/packagist/v/liborm85/loggable-http-client.svg)](https://packagist.org/packages/liborm85/loggable-http-client)
 
 Extended logging for the Symfony HTTP Client allowing especially to log the content of the request and response.
 
