@@ -494,7 +494,7 @@ class NativeHttpClientTest extends TestCase
                     'HTTP_CONTENT_LENGTH' => '7',
                     'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
                     'HTTP_ACCEPT_ENCODING' => 'gzip',
-                    'HTTP_USER_AGENT' => 'Symfony HttpClient/Native',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient (Native)',
                     'HTTP_HOST' => '127.0.0.1:8057',
                 ],
             ],

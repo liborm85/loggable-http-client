@@ -486,7 +486,7 @@ class AmpHttpClientTest extends TestCase
                     'HTTP_ACCEPT' => '*/*',
                     'HTTP_CONTENT_LENGTH' => '7',
                     'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
-                    'HTTP_USER_AGENT' => 'Symfony HttpClient/Amp',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient (Amp)',
                     'HTTP_ACCEPT_ENCODING' => 'gzip',
                     'HTTP_HOST' => '127.0.0.1:8057',
                 ],
