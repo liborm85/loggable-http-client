@@ -73,11 +73,11 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
     {
         try {
             return $this->response->getHeaders($throw);
-        } catch (ServerExceptionInterface $ex) {
+        } catch (ServerExceptionInterface) {
             throw new ServerException($this);
-        } catch (ClientExceptionInterface $ex) {
+        } catch (ClientExceptionInterface) {
             throw new ClientException($this);
-        } catch (RedirectionExceptionInterface $ex) {
+        } catch (RedirectionExceptionInterface) {
             throw new RedirectionException($this);
         }
     }
@@ -99,11 +99,11 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
         try {
             return $this->response->getContent($throw);
-        } catch (ServerExceptionInterface $ex) {
+        } catch (ServerExceptionInterface) {
             throw new ServerException($this);
-        } catch (ClientExceptionInterface $ex) {
+        } catch (ClientExceptionInterface) {
             throw new ClientException($this);
-        } catch (RedirectionExceptionInterface $ex) {
+        } catch (RedirectionExceptionInterface) {
             throw new RedirectionException($this);
         }
     }
@@ -126,11 +126,11 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
         try {
             return $this->response->toArray($throw);
-        } catch (ServerExceptionInterface $ex) {
+        } catch (ServerExceptionInterface) {
             throw new ServerException($this);
-        } catch (ClientExceptionInterface $ex) {
+        } catch (ClientExceptionInterface) {
             throw new ClientException($this);
-        } catch (RedirectionExceptionInterface $ex) {
+        } catch (RedirectionExceptionInterface) {
             throw new RedirectionException($this);
         }
     }
@@ -239,7 +239,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
         if ($isDestruct) {
             try {
                 $this->response->getContent(false); // load content
-            } catch (\Throwable $ex) {
+            } catch (\Throwable) {
 
             }
         }
