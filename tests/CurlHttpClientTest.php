@@ -542,7 +542,7 @@ class CurlHttpClientTest extends TestCase
                     'REQUEST_METHOD' => 'POST',
                     'HTTP_HOST' => '127.0.0.1:8057',
                     'HTTP_ACCEPT' => '*/*',
-                    'HTTP_USER_AGENT' => 'Symfony HttpClient (Curl)',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient/Curl',
                     'HTTP_ACCEPT_ENCODING' => 'gzip',
                     'HTTP_CONTENT_LENGTH' => '7',
                     'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
