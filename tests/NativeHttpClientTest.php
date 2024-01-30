@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\NativeHttpClient;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Test\TestHttpServer;
 
@@ -495,6 +496,57 @@ class NativeHttpClientTest extends TestCase
                     'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
                     'HTTP_ACCEPT_ENCODING' => 'gzip',
                     'HTTP_USER_AGENT' => 'Symfony HttpClient/Native',
+                    'HTTP_HOST' => '127.0.0.1:8057',
+                ],
+            ],
+        ];
+        $this->assertSameResponseContentLog($expected, $logger->logs);
+
+        $this->assertDateTime($requestTimeStart, $requestTimeFinish, $logger->logs[2]['request-time-datetime']);
+        $this->assertDateTime($responseTimeStart, $responseTimeFinish, $logger->logs[2]['response-time-datetime']);
+    }
+
+    public function testHttp404ThrowHttpException(): void
+    {
+        $logger = new TestLogger();
+        $client = $this->getHttpClient($logger);
+
+        $requestTimeStart = new \DateTimeImmutable();
+        $response = $client->request('POST', 'http://127.0.0.1:8057/404', ['body' => 'abc=def']);
+
+        $responseTimeStart = new \DateTimeImmutable();
+        try {
+            $response->getContent();
+        } catch (HttpExceptionInterface $ex) {
+            $this->assertSame(LoggableResponse::class, get_class($ex->getResponse()));
+
+            $this->assertSame('abc=def', (string)$ex->getResponse()->getInfo('request_body'));
+            $this->assertIsFloat($ex->getResponse()->getInfo('response_time'));
+        }
+        $requestTimeFinish = new \DateTimeImmutable();
+        $responseTimeFinish = new \DateTimeImmutable();
+
+        $expected = [
+            [
+                'message' => 'Request: "POST http://127.0.0.1:8057/404"',
+            ],
+            [
+                'message' => 'Response: "404 http://127.0.0.1:8057/404"',
+            ],
+            [
+                'message' => 'Response content: "404 http://127.0.0.1:8057/404"',
+                'request-content' => 'abc=def',
+                'response-content-json' => [
+                    'SERVER_PROTOCOL' => 'HTTP/1.1',
+                    'SERVER_NAME' => '127.0.0.1',
+                    'REQUEST_URI' => '/404',
+                    'REQUEST_METHOD' => 'POST',
+                    'HTTP_CONNECTION' => 'close',
+                    'HTTP_ACCEPT' => '*/*',
+                    'HTTP_CONTENT_LENGTH' => '7',
+                    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
+                    'HTTP_ACCEPT_ENCODING' => 'gzip',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient (Native)',
                     'HTTP_HOST' => '127.0.0.1:8057',
                 ],
             ],
