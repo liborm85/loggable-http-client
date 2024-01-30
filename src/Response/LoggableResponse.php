@@ -9,6 +9,9 @@ use Liborm85\LoggableHttpClient\Internal\DecoratorTrace;
 use Liborm85\LoggableHttpClient\LoggableHttpClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\EventSourceHttpClient;
+use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Component\HttpClient\Exception\RedirectionException;
+use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\Response\StreamableInterface;
 use Symfony\Component\HttpClient\Response\StreamWrapper;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -68,7 +71,15 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
      */
     public function getHeaders(bool $throw = true): array
     {
-        return $this->response->getHeaders($throw);
+        try {
+            return $this->response->getHeaders($throw);
+        } catch (ServerExceptionInterface $ex) {
+            throw new ServerException($this);
+        } catch (ClientExceptionInterface $ex) {
+            throw new ClientException($this);
+        } catch (RedirectionExceptionInterface $ex) {
+            throw new RedirectionException($this);
+        }
     }
 
     /**
@@ -86,7 +97,15 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
         $this->logResponseContent();
 
-        return $this->response->getContent($throw);
+        try {
+            return $this->response->getContent($throw);
+        } catch (ServerExceptionInterface $ex) {
+            throw new ServerException($this);
+        } catch (ClientExceptionInterface $ex) {
+            throw new ClientException($this);
+        } catch (RedirectionExceptionInterface $ex) {
+            throw new RedirectionException($this);
+        }
     }
 
     /**
@@ -105,7 +124,15 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
 
         $this->logResponseContent();
 
-        return $this->response->toArray($throw);
+        try {
+            return $this->response->toArray($throw);
+        } catch (ServerExceptionInterface $ex) {
+            throw new ServerException($this);
+        } catch (ClientExceptionInterface $ex) {
+            throw new ClientException($this);
+        } catch (RedirectionExceptionInterface $ex) {
+            throw new RedirectionException($this);
+        }
     }
 
     public function cancel(): void
