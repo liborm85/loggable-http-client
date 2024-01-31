@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.1.0 - 2024-01-31
 
 - added additional information in `getInfo()` for `getResponse()` after throw `HttpExceptionInterface` exception
 
