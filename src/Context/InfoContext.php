@@ -14,7 +14,7 @@ final class InfoContext implements InfoContextInterface
         $this->response = $response;
     }
 
-    public function getInfo(string $type = null): mixed
+    public function getInfo(?string $type = null): mixed
     {
         return $this->response->getInfo($type);
     }
