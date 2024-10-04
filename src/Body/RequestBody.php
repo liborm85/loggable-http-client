@@ -50,6 +50,7 @@ final class RequestBody implements BodyInterface
             return stream_get_contents($body) ?: '';
         }
 
+        /** @var string $body */
         return $body;
     }
 
@@ -68,6 +69,7 @@ final class RequestBody implements BodyInterface
         /** @var resource $stream */
         $stream = fopen("php://temp", 'r+');
 
+        /** @var string $body */
         fwrite($stream, $body);
         rewind($stream);
 
