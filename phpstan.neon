@@ -1,5 +1,4 @@
 parameters:
-  checkMissingIterableValueType: false
   level: 8
   paths:
     - src/
@@ -8,3 +7,7 @@ parameters:
   excludePaths:
     analyse:
       - vendor/
+
+  ignoreErrors:
+    -
+      identifier: missingType.iterableValue
