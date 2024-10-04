@@ -15,6 +15,10 @@ class TestLogger extends AbstractLogger
      */
     public $logs = [];
 
+    /**
+     * @param mixed $level
+     * @param string $message
+     */
     public function log($level, $message, array $context = []): void
     {
         $log = [
