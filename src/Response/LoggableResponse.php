@@ -163,7 +163,7 @@ final class LoggableResponse implements ResponseInterface, StreamableInterface
     /**
      * @return mixed
      */
-    public function getInfo(string $type = null)
+    public function getInfo(?string $type = null)
     {
         if (null !== $type) {
             return $this->info[$type] ?? $this->response->getInfo($type);

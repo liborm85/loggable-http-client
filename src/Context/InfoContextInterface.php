@@ -8,6 +8,6 @@ interface InfoContextInterface
     /**
      * @return mixed
      */
-    public function getInfo(string $type = null);
+    public function getInfo(?string $type = null);
 
 }
