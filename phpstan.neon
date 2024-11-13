@@ -11,3 +11,15 @@ parameters:
   ignoreErrors:
     -
       identifier: missingType.iterableValue
+
+    -
+      message: '#^Method Liborm85\\LoggableHttpClient\\Body\\RequestBody\:\:getContent\(\) never returns null so it can be removed from the return type\.$#'
+      identifier: return.unusedType
+      count: 1
+      path: src/Body/RequestBody.php
+
+    -
+      message: '#^Method Liborm85\\LoggableHttpClient\\Body\\RequestBody\:\:toStream\(\) never returns null so it can be removed from the return type\.$#'
+      identifier: return.unusedType
+      count: 1
+      path: src/Body/RequestBody.php
