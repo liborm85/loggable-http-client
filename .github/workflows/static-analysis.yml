@@ -29,6 +29,11 @@ jobs:
           composer require phpstan/phpstan --dev --no-update
           composer install --prefer-dist --no-progress
 
+      - name: Fix compatibility with phpstan 1.x
+        if: ${{ matrix.php  == '7.2' || matrix.php == '7.3' }}
+        run: |
+          sed -i ':a;$!N;1,12ba;P;$d;D' phpstan.neon
+
       - name: Run PHPStan
         run: |
           php vendor/bin/phpstan.phar --version
