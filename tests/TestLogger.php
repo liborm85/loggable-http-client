@@ -46,7 +46,10 @@ class TestLogger extends AbstractLogger
 
             $responseContentJson = $this->fromJson($context['response']->getContent());
             if ($responseContentJson !== null) {
-                $log['response-content-json'] = $responseContentJson;
+                $log['response-content-json'] = array_filter($responseContentJson,
+                    function ($key) {
+                        return !in_array($key, ['REMOTE_ADDR', 'REMOTE_PORT',]);
+                    }, ARRAY_FILTER_USE_KEY);
             }
 
             $responseStreamContent = $this->getContentFromStream($context['response']->toStream());
