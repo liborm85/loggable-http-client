@@ -14,14 +14,12 @@ Adds additional information to `getInfo()` method:
 - `request_body` (`\Liborm85\LoggableHttpClient\Body\BodyInterface`) - `body` option from request `$options` transformed to object (if is provided)
 - `response_time` (`float`) - the time when the response was received
 
-<!-- TBD
 ## Installation
 
 You can install it with:
 ```
 composer require liborm85/loggable-http-client
 ```
--->
 
 ## Usage
 
