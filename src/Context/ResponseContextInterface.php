@@ -15,6 +15,8 @@ interface ResponseContextInterface extends \Stringable
 
     public function getContent(): ?string;
 
+    public function toArray(): ?array;
+
     /**
      * @return resource|null
      */

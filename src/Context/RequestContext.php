@@ -88,6 +88,20 @@ final class RequestContext implements RequestContextInterface, BodyInterface
         }
     }
 
+    public function toArray(): ?array
+    {
+        $requestBody = $this->getRequestBody();
+        if ($requestBody === null) {
+            return null;
+        }
+
+        try {
+            return $requestBody->toArray();
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
     /**
      * @return resource|null
      */

@@ -32,6 +32,19 @@ $loggableHttpClient->setLogger(new \MyLogger());
 
 $response = $loggableHttpClient->request('GET', 'https://example.com');
 
+$response->getContent(); // standard response content as string
+$response->toArray(); // standard response content as array
+
+$requestBody = $response->getInfo('request_body');
+if (isset($requestBody) && ($requestBody instanceof \Liborm85\LoggableHttpClient\Body\BodyInterface)) {
+    $requestBody->getContent(); // request content body as string
+    (string)$requestBody; // is Stringable, request content body as string
+    $requestBody->toStream(); // request content body as PHP stream
+    $requestBody->toArray(); // request content body as array (if is possible, otherwise null)
+}
+
+$response->getInfo('response_time'); // the time when the response was received
+
 
 class MyLogger extends \Psr\Log\AbstractLogger
 {
@@ -42,6 +55,7 @@ class MyLogger extends \Psr\Log\AbstractLogger
             $context['request']->getContent(); // request content body as string
             (string)$context['request']; // is Stringable, request content body as string
             $context['request']->toStream(); // request content body as PHP stream
+            $context['request']->toArray(); // request content body as array (if is possible, otherwise null)
             $context['request']->getHeadersAsString(); // request headers as string
             $context['request']->getHeaders(); // request headers as array (string[][])
             $context['request']->getRequestTime(); // request time as DateTimeInterface
@@ -53,6 +67,7 @@ class MyLogger extends \Psr\Log\AbstractLogger
             $context['response']->getContent(); // response content body as string
             (string)$context['response']; // is Stringable, response content body as string
             $context['response']->toStream(); // response content body as PHP stream
+            $context['response']->toArray(); // response content body as array (if is possible, otherwise null)
             $context['response']->getHeadersAsString(); // response headers as string
             $context['response']->getHeaders(); // response headers as array (string[][])
             $context['response']->getResponseTime(); // response time as DateTimeInterface

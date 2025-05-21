@@ -60,6 +60,10 @@ class AmpHttpClientTest extends TestCase
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
+                'response-content-toarray' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
             ],
         ];
         $this->assertSameResponseContentLog($expected, $logger->logs);
@@ -101,6 +105,10 @@ class AmpHttpClientTest extends TestCase
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
+                'response-content-toarray' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
             ],
         ];
         $this->assertSameResponseContentLog($expected, $logger->logs);
@@ -134,7 +142,13 @@ class AmpHttpClientTest extends TestCase
             [
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
                 'request-content' => '{"abc":"def"}',
+                'request-content-json' => ['abc' => 'def'],
+                'request-content-toarray' => ['abc' => 'def'],
                 'response-content-json' => [
+                    '{"abc":"def"}' => '',
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'response-content-toarray' => [
                     '{"abc":"def"}' => '',
                     'REQUEST_METHOD' => 'POST',
                 ],
@@ -173,6 +187,10 @@ class AmpHttpClientTest extends TestCase
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content-json' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'response-content-toarray' => [
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
@@ -225,6 +243,10 @@ class AmpHttpClientTest extends TestCase
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
+                'response-content-toarray' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
             ],
         ];
         $this->assertSameResponseContentLog($expected, $logger->logs);
@@ -267,6 +289,10 @@ class AmpHttpClientTest extends TestCase
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
+                'response-content-toarray' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
             ],
         ];
         $this->assertSameResponseContentLog($expected, $logger->logs);
@@ -299,6 +325,10 @@ class AmpHttpClientTest extends TestCase
                 'message' => 'Response content: "200 http://127.0.0.1:8057/post"',
                 'request-content' => 'abc=def',
                 'response-content-json' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
+                'response-content-toarray' => [
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
@@ -400,6 +430,10 @@ class AmpHttpClientTest extends TestCase
                     'abc' => 'def',
                     'REQUEST_METHOD' => 'POST',
                 ],
+                'response-content-toarray' => [
+                    'abc' => 'def',
+                    'REQUEST_METHOD' => 'POST',
+                ],
                 'response-headers-content-type' => ['application/json'],
                 'info-canceled' => false,
             ],
@@ -491,6 +525,18 @@ class AmpHttpClientTest extends TestCase
                     'HTTP_ACCEPT_ENCODING' => 'gzip',
                     'HTTP_HOST' => '127.0.0.1:8057',
                 ],
+                'response-content-toarray' => [
+                    'SERVER_PROTOCOL' => 'HTTP/1.1',
+                    'SERVER_NAME' => '127.0.0.1',
+                    'REQUEST_URI' => '/404',
+                    'REQUEST_METHOD' => 'POST',
+                    'HTTP_ACCEPT' => '*/*',
+                    'HTTP_CONTENT_LENGTH' => '7',
+                    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient (Amp)',
+                    'HTTP_ACCEPT_ENCODING' => 'gzip',
+                    'HTTP_HOST' => '127.0.0.1:8057',
+                ],
             ],
         ];
         $this->assertSameResponseContentLog($expected, $logger->logs);
@@ -530,6 +576,18 @@ class AmpHttpClientTest extends TestCase
                 'message' => 'Response content: "404 http://127.0.0.1:8057/404"',
                 'request-content' => 'abc=def',
                 'response-content-json' => [
+                    'SERVER_PROTOCOL' => 'HTTP/1.1',
+                    'SERVER_NAME' => '127.0.0.1',
+                    'REQUEST_URI' => '/404',
+                    'REQUEST_METHOD' => 'POST',
+                    'HTTP_ACCEPT' => '*/*',
+                    'HTTP_CONTENT_LENGTH' => '7',
+                    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded',
+                    'HTTP_USER_AGENT' => 'Symfony HttpClient (Amp)',
+                    'HTTP_ACCEPT_ENCODING' => 'gzip',
+                    'HTTP_HOST' => '127.0.0.1:8057',
+                ],
+                'response-content-toarray' => [
                     'SERVER_PROTOCOL' => 'HTTP/1.1',
                     'SERVER_NAME' => '127.0.0.1',
                     'REQUEST_URI' => '/404',

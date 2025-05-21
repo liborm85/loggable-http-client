@@ -67,6 +67,15 @@ final class ResponseContext implements ResponseContextInterface, BodyInterface
         }
     }
 
+    public function toArray(): ?array
+    {
+        try {
+            return $this->response->toArray(false);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
     public function __toString(): string
     {
         return $this->getContent() ?? '';
