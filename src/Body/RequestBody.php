@@ -31,7 +31,11 @@ final class RequestBody implements BodyInterface
         }
 
         try {
-            $content = json_decode($content, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
+            if (\PHP_VERSION_ID >= 70300) {
+                $content = json_decode($content, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
+            } else {
+                $content = json_decode($content, true, 512, \JSON_BIGINT_AS_STRING);
+            }
         } catch (\JsonException $ex) {
             return null;
         }

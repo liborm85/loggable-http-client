@@ -34,6 +34,11 @@ jobs:
         run: |
           sed -i ':a;$!N;1,12ba;P;$d;D' phpstan.neon
 
+      - name: Ignore error in PHP 7.2
+        if: ${{ matrix.php  == '7.2' }}
+        run: |
+          echo "    - '#Constant JSON_THROW_ON_ERROR not found#'" >> phpstan.neon
+
       - name: Run PHPStan
         run: |
           php vendor/bin/phpstan.phar --version
