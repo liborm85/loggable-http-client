@@ -17,6 +17,8 @@ interface RequestContextInterface
 
     public function getContent(): ?string;
 
+    public function toArray(): ?array;
+
     /**
      * @return resource|null
      */

@@ -39,6 +39,11 @@ class TestLogger extends AbstractLogger
                 $log['request-content-from-stream'] = $requestStreamContent;
             }
 
+            $requestContentToArray = $context['request']->toArray();
+            if ($requestContentToArray !== null) {
+                $log['request-content-toarray'] = $requestContentToArray;
+            }
+
             $log['request-method'] = $context['request']->getRequestMethod();
             $log['request-url'] = $context['request']->getUrl();
             $log['request-headers'] = $context['request']->getHeaders();
@@ -63,6 +68,14 @@ class TestLogger extends AbstractLogger
             $responseStreamContent = $this->getContentFromStream($context['response']->toStream());
             if (is_string($responseStreamContent)) {
                 $log['response-content-from-stream'] = $responseStreamContent;
+            }
+
+            $responseContentToArray = $context['response']->toArray();
+            if ($responseContentToArray !== null) {
+                $log['response-content-toarray'] = array_filter($responseContentToArray,
+                    function ($key) {
+                        return !in_array($key, ['REMOTE_ADDR', 'REMOTE_PORT',]);
+                    }, ARRAY_FILTER_USE_KEY);
             }
 
             $log['response-headers'] = $context['response']->getHeaders();

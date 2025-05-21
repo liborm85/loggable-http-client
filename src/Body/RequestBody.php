@@ -23,6 +23,26 @@ final class RequestBody implements BodyInterface
         return $this->getBodyAsString($this->body);
     }
 
+    public function toArray(): ?array
+    {
+        $content = $this->getContent();
+        if ($content === null || $content === '') {
+            return null;
+        }
+
+        try {
+            $content = json_decode($content, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $ex) {
+            return null;
+        }
+
+        if (!is_array($content)) {
+            return null;
+        }
+
+        return $content;
+    }
+
     /**
      * @return resource|null
      */

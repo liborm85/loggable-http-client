@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- added `toArray()` method to convert JSON request/response data into an array for use in the logger's `request`, `response` contexts and `request_body` in info
+
 ## 1.1.1 - 2024-11-21
 - added PHP 8.4 support
 
