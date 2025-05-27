@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.2.0 - 2025-05-27
 
 - added `toArray()` method to convert JSON request/response data into an array for use in the logger's `request`, `response` contexts and `request_body` in info
 
