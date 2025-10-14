@@ -638,6 +638,7 @@ class AmpHttpClientTest extends TestCase
                 'message' => 'Response content: "0 http://127.0.0.1:8057/timeout-long"',
                 'request-content' => 'abc=def',
                 'response-content' => null,
+                'response-status-code' => 0,
                 'info-error' => 'Idle timeout reached for "http://127.0.0.1:8057/timeout-long".',
             ],
         ];
