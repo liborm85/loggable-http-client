@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.2.1 - 2025-10-14
 
 - fixed exception in `getStatusCode()` after throw `TransportExceptionInterface` exception
 
