@@ -75,6 +75,7 @@ class TestLogger extends AbstractLogger
             $log['response-headers-content-type'] = $context['response']->getHeaders()['content-type'] ?? null;
             $log['response-time'] = $context['response']->getResponseTime()?->format(DATE_RFC3339_EXTENDED);
             $log['response-time-datetime'] = $context['response']->getResponseTime();
+            $log['response-status-code'] = $context['response']->getStatusCode();
         }
 
         if (isset($context['info']) && ($context['info'] instanceof InfoContextInterface)) {

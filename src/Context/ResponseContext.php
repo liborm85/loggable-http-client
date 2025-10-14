@@ -19,7 +19,11 @@ final class ResponseContext implements ResponseContextInterface, BodyInterface
 
     public function getStatusCode(): int
     {
-        return $this->response->getStatusCode();
+        try {
+            return $this->response->getStatusCode();
+        } catch (\Throwable) {
+            return 0;
+        }
     }
 
     public function getResponseTime(): ?\DateTimeInterface
