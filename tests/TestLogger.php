@@ -14,6 +14,15 @@ class TestLogger extends AbstractLogger
 
     public function log($level, string|\Stringable $message, array $context = []): void
     {
+        // compatibility with symfony http client 7.0+
+        if (str_starts_with($message, 'Response: ')) {
+            if (str_ends_with($message, ' {total_time} seconds')) {
+                $message = substr($message, 0, -strlen(' {total_time} seconds'));
+            }
+
+            $message = $this->interpolateMessage($message, $context);
+        }
+
         $log = [
             'level' => $level,
             'message' => $message,
@@ -118,6 +127,15 @@ class TestLogger extends AbstractLogger
         }
 
         return stream_get_contents($stream);
+    }
+
+    private function interpolateMessage(string|\Stringable $message, array $context): string
+    {
+        $replacements = [];
+        foreach ($context as $key => $value) {
+            $replacements["{" . $key . "}"] = $value;
+        }
+        return strtr($message, $replacements);
     }
 
 }
