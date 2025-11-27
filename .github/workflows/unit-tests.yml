@@ -13,10 +13,16 @@ jobs:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
         php: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
-        symfony: [ '^6.4', '^7.3' ]
+        symfony: [ '^6.4', '^7.3', '^8.0' ]
         exclude:
           - php: '8.1'
             symfony: '^7.3'
+          - php: '8.1'
+            symfony: '^8.0'
+          - php: '8.2'
+            symfony: '^8.0'
+          - php: '8.3'
+            symfony: '^8.0'
 
     steps:
       - uses: actions/checkout@v2
@@ -25,6 +31,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
+
+      - name: Update compatible amphp/http-client version
+        if: ${{ matrix.symfony == '^8.0' }}
+        run: |
+          composer require amphp/http-client:"^5.3" --dev --no-update
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
