@@ -73,7 +73,6 @@ final class DecoratorTrace
 
         if ($reflection->hasProperty('client')) { // get from client property
             $property = $reflection->getProperty('client');
-            $property->setAccessible(true);
             $value = $property->getValue($client);
             if ($value instanceof HttpClientInterface) {
                 return $value;
@@ -81,7 +80,6 @@ final class DecoratorTrace
         }
 
         foreach ($reflection->getProperties() as $property) { // get from other HttpClientInterface property
-            $property->setAccessible(true);
             $value = $property->getValue($client);
             if ($value instanceof HttpClientInterface) {
                 return $value;
