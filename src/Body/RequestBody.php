@@ -64,7 +64,7 @@ final class RequestBody implements BodyInterface
         if (\is_resource($body)) {
             rewind($body);
 
-            return stream_get_contents($body) ?: '';
+            return (string)stream_get_contents($body);
         }
 
         /** @var string $body */

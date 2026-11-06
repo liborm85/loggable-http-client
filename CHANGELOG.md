@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- fixed request body stream content `"0"` being converted to an empty string
+
 ## 2.2.1 - 2025-10-14
 
 - fixed exception in `getStatusCode()` after throw `TransportExceptionInterface` exception
