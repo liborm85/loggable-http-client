@@ -130,7 +130,7 @@ class NativeHttpClientTest extends TestCase
         $requestTimeFinish = new \DateTimeImmutable();
         $responseTimeFinish = new \DateTimeImmutable();
 
-        $this->assertSame(['{"abc":"def"}' => '', 'REQUEST_METHOD' => 'POST'], $body);
+        $this->assertSame(['abc' => 'def', 'content-type' => 'application/json', 'REQUEST_METHOD' => 'POST'], $body);
 
         $expected = [
             [
@@ -145,11 +145,13 @@ class NativeHttpClientTest extends TestCase
                 'request-content-json' => ['abc' => 'def'],
                 'request-content-toarray' => ['abc' => 'def'],
                 'response-content-json' => [
-                    '{"abc":"def"}' => '',
+                    'abc' => 'def',
+                    'content-type' => 'application/json',
                     'REQUEST_METHOD' => 'POST',
                 ],
                 'response-content-toarray' => [
-                    '{"abc":"def"}' => '',
+                    'abc' => 'def',
+                    'content-type' => 'application/json',
                     'REQUEST_METHOD' => 'POST',
                 ],
             ],
