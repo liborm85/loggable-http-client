@@ -20,6 +20,7 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
 
     use DecoratorTrait, HttpClientTrait {
         DecoratorTrait::withOptions insteadof HttpClientTrait;
+        DecoratorTrait::withOptions as private withClientOptions;
     }
 
     /**
@@ -32,6 +33,16 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
      */
     private $info = [];
 
+    private array $defaultOptions = [];
+
+    public function withOptions(array $options): static
+    {
+        $clone = $this->withClientOptions($options);
+        $clone->defaultOptions = self::mergeDefaultOptions($options, $this->defaultOptions, true);
+
+        return $clone;
+    }
+
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
@@ -43,6 +54,7 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
 
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
+        $options = self::mergeDefaultOptions($options, $this->defaultOptions, true);
         $options['buffer'] = true;
 
         if (defined('CURLINFO_HEADER_OUT')) {
@@ -106,7 +118,13 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
         $options['body'] = $this->fixBody($normalizedOptions['body']);
 
         if (isset($options['json'])) {
-            unset($options['json']);
+            $headers = self::normalizeHeaders($options['headers'] ?? []);
+            if (!isset($headers['content-type'])) {
+                $options['headers'][] = 'Content-Type: application/json';
+            }
+
+            // Override any default JSON option on the inner client: the body is already encoded
+            $options['json'] = null;
         }
 
         return $options;
