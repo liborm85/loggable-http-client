@@ -3,6 +3,8 @@
 ## Unreleased
 
 - fixed request body stream content `"0"` being converted to an empty string
+- fixed sending and logging default request bodies set via `withOptions()`
+- fixed missing `Content-Type: application/json` header for JSON requests
 
 ## 2.2.1 - 2025-10-14
 
