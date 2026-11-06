@@ -33,9 +33,12 @@ final class LoggableHttpClient implements HttpClientInterface, ResetInterface, L
      */
     private $info = [];
 
-    private array $defaultOptions = [];
+    /**
+     * @var array
+     */
+    private $defaultOptions = [];
 
-    public function withOptions(array $options): static
+    public function withOptions(array $options): self
     {
         $clone = $this->withClientOptions($options);
         $clone->defaultOptions = self::mergeDefaultOptions($options, $this->defaultOptions, true);
