@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.2 - 2026-11-22
 
 - fixed request body stream content `"0"` being converted to an empty string
 - fixed sending and logging default request bodies set via `withOptions()`
